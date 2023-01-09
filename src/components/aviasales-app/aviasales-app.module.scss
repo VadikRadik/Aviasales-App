@@ -1,0 +1,100 @@
+@font-face {
+  font-family: 'Open Sans';
+  src: url('../../assets/fonts/OpenSans-Regular.ttf') format('truetype');
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #E5E5E5;
+}
+
+.aviasales-app {
+  font-family: 'Open Sans';
+  min-height: 100vh;
+  background-color: #F3F7FA;
+  max-width: 1020px;
+  min-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (max-width: 790px) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.aviasales-app__logo {
+  margin-top: 40px;
+}
+
+.aviasales-app__desctop-layout {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+
+  @media (max-width: 790px) {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    max-width: 502px;
+  }
+}
+
+.aviasales-app__transfers-filter {
+  margin-right: 20px;
+
+  @media (max-width: 790px) {
+    display: none;
+  }
+}
+
+.aviasales-app__transfers-filter--mobile {
+  margin-right: 10px;
+
+  @media (min-width: 790px) {
+    display: none;
+  }
+}
+
+.aviasales-app__tickets-layout {
+  display: flex;
+  flex-direction: column;
+  
+  @media (max-width: 790px) {
+    /*max-width: 502px;
+    min-width: 350px;*/
+    width: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 0;
+    margin-right: 0;
+    flex-grow: 1;
+    align-content: stretch;
+  }
+}
+
+.aviasales-app__more-button {
+  margin-top: 20px;
+  margin-bottom: 50px;
+
+  @media (max-width: 790px) {
+    margin-top: 10px;
+  }
+}
+
+.aviasales-app__ticket-card {
+  margin-top: 20px;
+
+  @media (max-width: 790px) {
+    margin-top: 10px;
+  }
+}
+
+.aviasales-app__mobile-filters-layout {
+  display: flex;
+  flex-direction: row;
+}
