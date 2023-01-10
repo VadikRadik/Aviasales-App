@@ -1,0 +1,22 @@
+.card-info {
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.card-info__label {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #A0B0B9;
+}
+
+.card-info__info {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    color: #4A4A4A;
+}
