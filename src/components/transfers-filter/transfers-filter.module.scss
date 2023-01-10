@@ -16,14 +16,18 @@
 .transfers-filter__list {
     display: flex;
     flex-direction: column;
-    padding-left: 20px;
 }
 
 .transfers-filter__list-item {
     height: 40px;
+    padding-left: 20px;
 
     @media (max-width: 790px) {
         height: 30px;
+    }
+
+    &:hover {
+        background-color: #F1FCFF;
     }
 }
 
@@ -40,4 +44,5 @@
     color: #4A4A4A;
     margin-top: 20px;
     margin-bottom: 10px;
+    padding-left: 20px;
 }
