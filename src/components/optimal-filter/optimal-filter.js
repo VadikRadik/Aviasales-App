@@ -1,15 +1,40 @@
+import classNames from 'classnames'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
+import { price, time, optimal } from '../../actions'
+
 import classes from './optimal-filter.module.scss'
 
-const OptimalFilter = () => {
-  return (
-    <div className={classes['optimal-filter']}>
-      <div className={`${classes['optimal-filter__item']} ${classes['optimal-filter__item--selected']}`}>
-        Самый дешевый
+const filterItemsLabels = ['Самый дешевый', 'Самый быстрый', 'Оптимальный']
+
+const OptimalFilter = ({ value, price, time, optimal }) => {
+  const actions = [price, time, optimal]
+  const filterItems = filterItemsLabels.map((itemLabel, index) => {
+    const itemClass = classNames(classes['optimal-filter__item'], {
+      [classes['optimal-filter__item--selected']]: index === value,
+    })
+    return (
+      <div key={index} className={itemClass} onClick={actions[index]}>
+        {itemLabel}
       </div>
-      <div className={classes['optimal-filter__item']}>Самый быстрый</div>
-      <div className={classes['optimal-filter__item']}>Оптимальный</div>
-    </div>
-  )
+    )
+  })
+  return <div className={classes['optimal-filter']}>{filterItems}</div>
 }
 
-export default OptimalFilter
+const mapStateToProps = (state) => {
+  return {
+    value: state,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    price: bindActionCreators(price, dispatch),
+    time: bindActionCreators(time, dispatch),
+    optimal: bindActionCreators(optimal, dispatch),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(OptimalFilter)
