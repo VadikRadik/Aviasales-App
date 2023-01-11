@@ -31,7 +31,23 @@ const reducer = (state, action) => {
       }
     case 'TOGGLE_TRANSFER': {
       let newChecks = [...state.transfersFilter.checks]
-      newChecks[action.checkBoxIndex] = action.checked
+
+      const isToggledAll = action.checkBoxIndex === 0
+      if (isToggledAll) {
+        // checking checkbox all checks the others same
+        newChecks = newChecks.fill(action.checked)
+      } else {
+        // others checkboxes check only themselfs
+        newChecks[action.checkBoxIndex] = action.checked
+        const otherChecks = newChecks.slice(1)
+        // checkbox all is checked only if all checkboxes are checked
+        if (otherChecks.every((check) => check === true)) {
+          newChecks[0] = true
+        } else {
+          newChecks[0] = false
+        }
+      }
+
       return {
         ...state,
         transfersFilter: { checks: newChecks },
