@@ -25,7 +25,7 @@ const OptimalFilter = ({ value, price, time, optimal }) => {
 
 const mapStateToProps = (state) => {
   return {
-    value: state,
+    value: state.optimalFilterValue,
   }
 }
 

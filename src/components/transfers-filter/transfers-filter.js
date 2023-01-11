@@ -1,30 +1,41 @@
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
 import Checkbox from '../checkbox/checkbox'
+import { toggleTransfer } from '../../actions'
 
 import classes from './transfers-filter.module.scss'
 
-const TransfersFilter = (props) => {
+const checkboxLabels = ['Все', 'Без пересадок', '1 пересадка', '2 пересадки', '3 пересадки']
+
+const TransfersFilter = ({ className, onClick, transfersFilter = undefined }) => {
+  const checkboxes = checkboxLabels.map((label, index) => {
+    return (
+      <div key={index} className={classes['transfers-filter__list-item']}>
+        <Checkbox label={label} onChange={(e) => onClick(e, index)} checked={transfersFilter?.checks[index]} />
+      </div>
+    )
+  })
   return (
-    <div className={`${classes['transfers-filter']} ${props.className}`}>
+    <div className={`${classes['transfers-filter']} ${className}`}>
       <div className={classes['transfers-filter__list']}>
         <span className={classes['transfers-filter__list-label']}>Количество пересадок</span>
-        <div className={classes['transfers-filter__list-item']}>
-          <Checkbox label="Все" focused />
-        </div>
-        <div className={`${classes['transfers-filter__list-item']} ${classes['transfers-filter__list-item--focused']}`}>
-          <Checkbox label="Без пересадок" focused />
-        </div>
-        <div className={classes['transfers-filter__list-item']}>
-          <Checkbox label="1 пересадка" checked />
-        </div>
-        <div className={classes['transfers-filter__list-item']}>
-          <Checkbox label="2 пересадки" focused />
-        </div>
-        <div className={classes['transfers-filter__list-item']}>
-          <Checkbox label="3 пересадки" />
-        </div>
+        {checkboxes}
       </div>
     </div>
   )
 }
 
-export default TransfersFilter
+const mapStateToProps = (state) => {
+  return {
+    transfersFilter: { checks: state.transfersFilter.checks },
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onClick: bindActionCreators(toggleTransfer, dispatch),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransfersFilter)

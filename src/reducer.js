@@ -1,4 +1,11 @@
-const initialState = 0
+import { OPTIMAL_PRICE, OPTIMAL_TIME, OPTIMAL } from './actions'
+
+const initialState = {
+  transfersFilter: {
+    checks: [false, false, false, false, false],
+  },
+  optimalFilterValue: OPTIMAL_PRICE,
+}
 
 const reducer = (state, action) => {
   if (state === undefined) {
@@ -8,11 +15,29 @@ const reducer = (state, action) => {
   // todo named constant to actions
   switch (action.type) {
     case 'OPTIMAL_PRICE':
-      return 0
+      return {
+        transfersFilter: { checks: [...state.transfersFilter.checks] },
+        optimalFilterValue: OPTIMAL_PRICE,
+      }
     case 'OPTIMAL_TIME':
-      return 1
+      return {
+        transfersFilter: { checks: [...state.transfersFilter.checks] },
+        optimalFilterValue: OPTIMAL_TIME,
+      }
     case 'OPTIMAL':
-      return 2
+      return {
+        transfersFilter: { checks: [...state.transfersFilter.checks] },
+        optimalFilterValue: OPTIMAL,
+      }
+    case 'TOGGLE_TRANSFER': {
+      let newChecks = [...state.transfersFilter.checks]
+      newChecks[action.checkBoxIndex] = action.checked
+      return {
+        ...state,
+        transfersFilter: { checks: newChecks },
+      }
+    }
+
     default:
       return state
   }

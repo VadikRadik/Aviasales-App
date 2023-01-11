@@ -10,7 +10,7 @@ const Checkbox = (props) => {
   const checkboxViewClass = classnames(classes['checkbox__view'])
   return (
     <label className={labelClass}>
-      <input type="checkbox" className={checkboxClass} checked={props.checked} />
+      <input type="checkbox" className={checkboxClass} checked={props.checked} onChange={props.onChange} />
       <span className={checkboxViewClass}></span>
       {props.label}
     </label>
