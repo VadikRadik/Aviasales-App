@@ -5,6 +5,9 @@ const initialState = {
     checks: [false, false, false, false, false],
   },
   optimalFilterValue: OPTIMAL_PRICE,
+  tickets: [],
+  isLoading: false,
+  error: null,
 }
 
 const reducer = (state, action) => {
@@ -16,17 +19,17 @@ const reducer = (state, action) => {
   switch (action.type) {
     case 'OPTIMAL_PRICE':
       return {
-        transfersFilter: { checks: [...state.transfersFilter.checks] },
+        ...state,
         optimalFilterValue: OPTIMAL_PRICE,
       }
     case 'OPTIMAL_TIME':
       return {
-        transfersFilter: { checks: [...state.transfersFilter.checks] },
+        ...state,
         optimalFilterValue: OPTIMAL_TIME,
       }
     case 'OPTIMAL':
       return {
-        transfersFilter: { checks: [...state.transfersFilter.checks] },
+        ...state,
         optimalFilterValue: OPTIMAL,
       }
     case 'TOGGLE_TRANSFER': {
@@ -39,13 +42,10 @@ const reducer = (state, action) => {
       } else {
         // others checkboxes check only themselfs
         newChecks[action.checkBoxIndex] = action.checked
-        const otherChecks = newChecks.slice(1)
+
         // checkbox all is checked only if all checkboxes are checked
-        if (otherChecks.every((check) => check === true)) {
-          newChecks[0] = true
-        } else {
-          newChecks[0] = false
-        }
+        const otherChecks = newChecks.slice(1)
+        newChecks[0] = otherChecks.every((check) => check === true)
       }
 
       return {
@@ -53,6 +53,26 @@ const reducer = (state, action) => {
         transfersFilter: { checks: newChecks },
       }
     }
+    case 'GET_TICKETS_PROCESS':
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      }
+    case 'GET_TICKETS_FAILED':
+      console.log(action.error.message)
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      }
+    case 'GET_TICKETS_FINISHED':
+      return {
+        ...state,
+        isLoading: false,
+        tickets: action.tickets.slice(0, 5),
+        error: null,
+      }
 
     default:
       return state

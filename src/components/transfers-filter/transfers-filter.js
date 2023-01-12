@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import Checkbox from '../checkbox/checkbox'
-import { toggleTransfer } from '../../actions'
+import { toggleTransfer } from '../../services/redux/actions'
 
 import classes from './transfers-filter.module.scss'
 

@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import { price, time, optimal } from '../../actions'
+import { price, time, optimal } from '../../services/redux/actions'
 
 import classes from './optimal-filter.module.scss'
 

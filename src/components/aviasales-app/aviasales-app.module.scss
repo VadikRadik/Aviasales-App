@@ -82,6 +82,10 @@ body {
   @media (max-width: 790px) {
     margin-top: 10px;
   }
+
+  &:active {
+    box-shadow: inset 0px 0px 16px rgba(2, 56, 100, 0.2);
+  }
 }
 
 .aviasales-app__ticket-card {
@@ -95,4 +99,10 @@ body {
 .aviasales-app__mobile-filters-layout {
   display: flex;
   flex-direction: row;
+}
+
+.aviasales-app__tickets-layout-spinner {
+  align-self: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
