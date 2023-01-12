@@ -1,0 +1,9 @@
+.ticket-card__info-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.ticket-card__info-row-item {
+    flex-grow: 1;
+    flex-basis: 33%;
+}

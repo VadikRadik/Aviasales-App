@@ -22,6 +22,7 @@ const AviasalesApp = ({ onStartGetTickets, onGetTickets, tickets, isLoading, err
             key={`${ticket.carrier}-${ticket.segments[0].destination}-${ticket.segments[0].origin}-${ticket.date}`}
             className={classes['aviasales-app__ticket-card']}
             price={ticket.price}
+            carrier={ticket.carrier}
             infoSegmentForward={ticket.segments[0]}
             infoSegmentBack={ticket.segments[1]}
           />

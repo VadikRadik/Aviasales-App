@@ -28,11 +28,7 @@
 }
 
 .ticket-card__logo {
-    background-image: url("./S7\ Logo.png");
-    background-repeat: no-repeat;
-    background-position: right;
-    height: 100%;
-    min-width: 200px;
+    max-height: 36px;
     object-fit: contain;
 }
 
@@ -43,4 +39,5 @@
 
 .ticket-card__info-row-item {
     flex-grow: 1;
+    flex-basis: 33%;
 }
