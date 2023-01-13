@@ -10,6 +10,7 @@ import MoreButton from '../more-button'
 import TicketCard from '../ticket-card'
 import Spinner from '../spinner/spinner'
 import { getTicketsProcessStart, getTicketsBatch, showMoreTickets } from '../../services/redux/actions'
+import Alert from '../alert/alert'
 
 import classes from './aviasales-app.module.scss'
 
@@ -21,11 +22,24 @@ const AviasalesApp = ({
   showTickets,
   progress,
   showMore,
+  error,
 }) => {
   useEffect(() => {
     startLoadingTickets()
     loadTickets()
   }, [])
+
+  const alertError = error ? (
+    <Alert className={classes['aviasales-app__alert']} type="error" message={error.message} />
+  ) : null
+  const alertInfo =
+    filteredTickets === null || (filteredTickets && filteredTickets.length === 0) ? (
+      <Alert
+        className={classes['aviasales-app__alert']}
+        type="info"
+        message={'Рейсов, подходящих под заданные фильтры, не найдено'}
+      />
+    ) : null
 
   const tickets = filteredTickets ? filteredTickets.slice(0, showTickets) : []
   const ticketsListContent = isLoading ? (
@@ -60,6 +74,8 @@ const AviasalesApp = ({
               <TransfersFilter className={classes['aviasales-app__transfers-filter--mobile']} />
               <OptimalFilter />
             </div>
+            {alertInfo}
+            {alertError}
             {ticketsListContent}
             {moreButton}
           </div>
@@ -73,7 +89,7 @@ const mapStateToProps = (state) => {
   return {
     filteredTickets: state.filteredTickets,
     isLoading: state.isNothingToShow,
-    //error: state.error,
+    error: state.error,
     showTickets: state.showTickets,
     progress: state.ticketsLoadingProgress,
   }

@@ -106,3 +106,13 @@ body {
   margin-top: 50px;
   margin-bottom: 50px;
 }
+
+.aviasales-app__alert {
+  margin-top: 20px;
+  box-sizing: border-box;
+  padding: 10px;
+
+  @media (max-width: 790px) {
+    margin-top: 10px;
+  }
+}

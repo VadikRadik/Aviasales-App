@@ -105,7 +105,6 @@ const reducer = (state, action) => {
         filteredTickets: [],
       }
     case 'GET_TICKETS_FAILED':
-      console.log(action.error.message)
       return {
         ...state,
         error: action.error,

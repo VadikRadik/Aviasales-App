@@ -1,0 +1,30 @@
+.alert {
+    border-radius: 5px;
+    min-width: 502px;
+    height: 50px;
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: default;
+    border-style: none;
+
+    @media (max-width: 790px) {
+        min-width: 350px;
+    }
+}
+
+.alert--info {
+    background-color: #2195f36b;
+    border: 1px solid #2195f3;
+}
+
+.alert--error {
+    background-color: #f321216b;
+    border: 1px solid #f32121;
+}
