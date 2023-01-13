@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { useEffect } from 'react'
+import LoadingBar from 'react-top-loading-bar'
 
 import Logo from '../logo'
 import TransfersFilter from '../transfers-filter'
@@ -12,7 +13,7 @@ import { getTicketsProcessStart, getTicketsBatch } from '../../services/redux/ac
 
 import classes from './aviasales-app.module.scss'
 
-const AviasalesApp = ({ startLoadingTickets, loadTickets, filteredTickets, isLoading, showTickets }) => {
+const AviasalesApp = ({ startLoadingTickets, loadTickets, filteredTickets, isLoading, showTickets, progress }) => {
   useEffect(() => {
     startLoadingTickets()
     loadTickets()
@@ -22,10 +23,10 @@ const AviasalesApp = ({ startLoadingTickets, loadTickets, filteredTickets, isLoa
   const ticketsListContent = isLoading ? (
     <Spinner className={classes['aviasales-app__tickets-layout-spinner']} />
   ) : (
-    tickets.map((ticket) => {
+    tickets.map((ticket, index) => {
       return (
         <TicketCard
-          key={`${ticket.carrier}-${ticket.segments[0].destination}-${ticket.segments[0].origin}-${ticket.segments[0].date}`}
+          key={`${ticket.carrier}-${ticket.segments[0].destination}-${ticket.segments[0].origin}-${ticket.segments[0].date}-${index}`}
           className={classes['aviasales-app__ticket-card']}
           price={ticket.price}
           carrier={ticket.carrier}
@@ -40,17 +41,20 @@ const AviasalesApp = ({ startLoadingTickets, loadTickets, filteredTickets, isLoa
       <MoreButton className={classes['aviasales-app__more-button']} onClick={() => {}} />
     ) : null
   return (
-    <div className={classes['aviasales-app']}>
-      <Logo className={classes['aviasales-app__logo']} />
-      <div className={classes['aviasales-app__desctop-layout']}>
-        <TransfersFilter className={classes['aviasales-app__transfers-filter']} />
-        <div className={classes['aviasales-app__tickets-layout']}>
-          <div className={classes['aviasales-app__mobile-filters-layout']}>
-            <TransfersFilter className={classes['aviasales-app__transfers-filter--mobile']} />
-            <OptimalFilter />
+    <div>
+      <LoadingBar color="#2196f3" progress={progress} height={4} waitingTime={2000} />
+      <div className={classes['aviasales-app']}>
+        <Logo className={classes['aviasales-app__logo']} />
+        <div className={classes['aviasales-app__desctop-layout']}>
+          <TransfersFilter className={classes['aviasales-app__transfers-filter']} />
+          <div className={classes['aviasales-app__tickets-layout']}>
+            <div className={classes['aviasales-app__mobile-filters-layout']}>
+              <TransfersFilter className={classes['aviasales-app__transfers-filter--mobile']} />
+              <OptimalFilter />
+            </div>
+            {ticketsListContent}
+            {moreButton}
           </div>
-          {ticketsListContent}
-          {moreButton}
         </div>
       </div>
     </div>
@@ -63,6 +67,7 @@ const mapStateToProps = (state) => {
     isLoading: state.isNothingToShow,
     //error: state.error,
     showTickets: state.showTickets,
+    progress: state.ticketsLoadingProgress,
   }
 }
 

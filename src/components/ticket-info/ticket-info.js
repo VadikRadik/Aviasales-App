@@ -9,7 +9,7 @@ const TicketInfo = ({ segmentInfo }) => {
   const stopsCount = segmentInfo.stops.length
   const timeHead = `${segmentInfo.origin} - ${segmentInfo.destination}`
   const stops = stopsCount ? segmentInfo.stops.join(', ') : '-'
-  const startFinishTime = `${format(date, 'H:m')} - ${format(add(date, { minutes: segmentInfo.duration }), 'H:m')}`
+  const startFinishTime = `${format(date, 'HH:mm')} - ${format(add(date, { minutes: segmentInfo.duration }), 'HH:mm')}`
   const travelTime = `${Math.trunc(segmentInfo.duration / 60)}ч ${segmentInfo.duration % 60}м`
   let transferLabel = `${stopsCount} пересад`
   if (stopsCount === 1) {

@@ -113,7 +113,7 @@ const reducer = (state, action) => {
     case 'GET_TICKETS_FINISHED': {
       const newTickets = [...state.tickets, ...action.tickets]
       const newFilteredTickets = filter(newTickets, state.optimalFilterValue, state.transfersFilter.checks)
-      console.log(100)
+
       return {
         ...state,
         tickets: newTickets,
@@ -126,13 +126,12 @@ const reducer = (state, action) => {
       const newTickets = [...state.tickets, ...action.tickets]
       const newProgress = state.ticketsLoadingProgress + (100 * action.tickets.length) / ALL_TICKETS_COUNT
       const newFilteredTickets = filter(newTickets, state.optimalFilterValue, state.transfersFilter.checks)
-      console.log(newProgress)
       return {
         ...state,
         isNothingToShow: false,
         tickets: newTickets,
         error: null,
-        ticketsLoadingProgress: newProgress,
+        ticketsLoadingProgress: newProgress > 100 ? 100 : newProgress,
         filteredTickets: newFilteredTickets,
       }
     }
