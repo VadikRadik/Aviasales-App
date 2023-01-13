@@ -1,6 +1,6 @@
 import { useState, useEffect, React } from 'react'
 
-import InfoLine from '../info-line/info-line'
+import TicketInfo from '../ticket-info/'
 
 import classes from './ticket-card.module.scss'
 
@@ -25,8 +25,8 @@ const TicketCard = ({ className, price, carrier, infoSegmentForward, infoSegment
         <div className={classes['ticket-card__price']}>{`${price.toLocaleString()} ₽`}</div>
         <img className={classes['ticket-card__logo']} src={image} alt={`${carrier} лого`} />
       </div>
-      <InfoLine segmentInfo={infoSegmentForward} />
-      <InfoLine segmentInfo={infoSegmentBack} />
+      <TicketInfo segmentInfo={infoSegmentForward} />
+      <TicketInfo segmentInfo={infoSegmentBack} />
     </div>
   )
 }

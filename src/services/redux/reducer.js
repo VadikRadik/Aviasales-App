@@ -1,4 +1,4 @@
-import { OPTIMAL_PRICE, OPTIMAL_TIME, OPTIMAL } from './actions'
+import { OPTIMAL_PRICE, OPTIMAL_TIME, OPTIMAL, ALL_TICKETS_COUNT } from './actions'
 
 const initialState = {
   transfersFilter: {
@@ -6,8 +6,10 @@ const initialState = {
   },
   optimalFilterValue: OPTIMAL_PRICE,
   tickets: [],
-  isLoading: false,
+  isNothingToShow: true,
   error: null,
+  ticketsLoadingProgress: 0,
+  showTickets: 5,
 }
 
 const reducer = (state, action) => {
@@ -53,26 +55,41 @@ const reducer = (state, action) => {
         transfersFilter: { checks: newChecks },
       }
     }
-    case 'GET_TICKETS_PROCESS':
+    case 'GET_TICKETS_PROCESS_STARTED':
       return {
         ...state,
-        isLoading: true,
+        isNothingToShow: true,
         error: null,
+        ticketsLoadingProgress: 0,
       }
     case 'GET_TICKETS_FAILED':
       console.log(action.error.message)
       return {
         ...state,
-        isLoading: false,
         error: action.error,
       }
-    case 'GET_TICKETS_FINISHED':
+    case 'GET_TICKETS_FINISHED': {
+      const newTickets = [...state.tickets, ...action.tickets]
+      console.log(100)
       return {
         ...state,
-        isLoading: false,
-        tickets: action.tickets.slice(0, 5),
+        tickets: newTickets,
         error: null,
+        ticketsLoadingProgress: 100,
       }
+    }
+    case 'GET_TICKETS_BATCH_GOT': {
+      const newTickets = [...state.tickets, ...action.tickets]
+      const newProgress = state.ticketsLoadingProgress + (100 * action.tickets.length) / ALL_TICKETS_COUNT
+      console.log(newProgress)
+      return {
+        ...state,
+        isNothingToShow: false,
+        tickets: newTickets,
+        error: null,
+        ticketsLoadingProgress: newProgress,
+      }
+    }
 
     default:
       return state

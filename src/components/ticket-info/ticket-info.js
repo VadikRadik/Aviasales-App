@@ -2,9 +2,9 @@ import { add, format } from 'date-fns'
 
 import CardInfo from '../card-info/card-info'
 
-import classes from './info-line.module.scss'
+import classes from './ticket-info.module.scss'
 
-const InfoLine = ({ segmentInfo }) => {
+const TicketInfo = ({ segmentInfo }) => {
   const date = new Date(segmentInfo.date)
   const stopsCount = segmentInfo.stops.length
   const timeHead = `${segmentInfo.origin} - ${segmentInfo.destination}`
@@ -29,4 +29,4 @@ const InfoLine = ({ segmentInfo }) => {
   )
 }
 
-export default InfoLine
+export default TicketInfo

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { useEffect } from 'react'
 
 import Logo from '../logo'
 import TransfersFilter from '../transfers-filter'
@@ -7,28 +8,37 @@ import OptimalFilter from '../optimal-filter'
 import MoreButton from '../more-button'
 import TicketCard from '../ticket-card'
 import Spinner from '../spinner/spinner'
-import { getTicketsProcessStart, getTickets } from '../../services/redux/actions'
+import { getTicketsProcessStart, getTicketsBatch } from '../../services/redux/actions'
 
 import classes from './aviasales-app.module.scss'
 
-const AviasalesApp = ({ onStartGetTickets, onGetTickets, tickets, isLoading, error }) => {
-  const ticketsListContent =
-    isLoading || error ? (
-      <Spinner className={classes['aviasales-app__tickets-layout-spinner']} />
-    ) : (
-      tickets.map((ticket) => {
-        return (
-          <TicketCard
-            key={`${ticket.carrier}-${ticket.segments[0].destination}-${ticket.segments[0].origin}-${ticket.date}`}
-            className={classes['aviasales-app__ticket-card']}
-            price={ticket.price}
-            carrier={ticket.carrier}
-            infoSegmentForward={ticket.segments[0]}
-            infoSegmentBack={ticket.segments[1]}
-          />
-        )
-      })
-    )
+const AviasalesApp = ({ startLoadingTickets, loadTickets, allTickets, isLoading, showTickets }) => {
+  useEffect(() => {
+    startLoadingTickets()
+    loadTickets()
+  }, [])
+
+  const tickets = allTickets.slice(0, showTickets)
+  const ticketsListContent = isLoading ? (
+    <Spinner className={classes['aviasales-app__tickets-layout-spinner']} />
+  ) : (
+    tickets.map((ticket) => {
+      return (
+        <TicketCard
+          key={`${ticket.carrier}-${ticket.segments[0].destination}-${ticket.segments[0].origin}-${ticket.segments[0].date}`}
+          className={classes['aviasales-app__ticket-card']}
+          price={ticket.price}
+          carrier={ticket.carrier}
+          infoSegmentForward={ticket.segments[0]}
+          infoSegmentBack={ticket.segments[1]}
+        />
+      )
+    })
+  )
+  const moreButton =
+    showTickets < allTickets.length ? (
+      <MoreButton className={classes['aviasales-app__more-button']} onClick={() => {}} />
+    ) : null
   return (
     <div className={classes['aviasales-app']}>
       <Logo className={classes['aviasales-app__logo']} />
@@ -40,13 +50,7 @@ const AviasalesApp = ({ onStartGetTickets, onGetTickets, tickets, isLoading, err
             <OptimalFilter />
           </div>
           {ticketsListContent}
-          <MoreButton
-            className={classes['aviasales-app__more-button']}
-            onClick={() => {
-              onStartGetTickets()
-              onGetTickets()
-            }}
-          />
+          {moreButton}
         </div>
       </div>
     </div>
@@ -55,20 +59,17 @@ const AviasalesApp = ({ onStartGetTickets, onGetTickets, tickets, isLoading, err
 
 const mapStateToProps = (state) => {
   return {
-    tickets: state.tickets,
-    isLoading: state.isLoading,
-    error: state.error,
+    allTickets: state.tickets,
+    isLoading: state.isNothingToShow,
+    //error: state.error,
+    showTickets: state.showTickets,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    //ticketsLoader: bindActionCreators(() => {
-    //  getTicketsProcessStart()
-    //  getTickets()
-    //}, dispatch),
-    onStartGetTickets: bindActionCreators(getTicketsProcessStart, dispatch),
-    onGetTickets: bindActionCreators(getTickets, dispatch),
+    startLoadingTickets: bindActionCreators(getTicketsProcessStart, dispatch),
+    loadTickets: bindActionCreators(getTicketsBatch, dispatch),
   }
 }
 
