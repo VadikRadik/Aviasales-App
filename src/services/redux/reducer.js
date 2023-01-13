@@ -17,6 +17,11 @@ const initialState = {
 }
 
 const filterTicketsByTransfers = (tickets, transfers) => {
+  const isAllUnchecked = transfers.every((check) => check === false)
+  if (isAllUnchecked) {
+    return []
+  }
+
   return tickets.filter((ticket) => {
     const noTransfersCondition = ticket.segments[0].stops.length === 0 || ticket.segments[1].stops.length === 0
     const oneTransfersCondition = ticket.segments[0].stops.length === 1 || ticket.segments[1].stops.length === 1
@@ -32,7 +37,7 @@ const filterTicketsByTransfers = (tickets, transfers) => {
 }
 
 const filter = (allTickets, optimal, transfers) => {
-  const isAllTransfers = transfers.every((check) => check === false)
+  const isAllTransfers = transfers.every((check) => check === true)
   const transfersFiltered = isAllTransfers ? [...allTickets] : filterTicketsByTransfers(allTickets, transfers)
   switch (optimal) {
     case OPTIMAL_PRICE:

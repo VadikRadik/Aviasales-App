@@ -49,7 +49,7 @@ export const getTicketsBatch = () => {
           dispatch(ticketsBatchGot(result.tickets))
           setTimeout(() => {
             dispatch(getTicketsBatch())
-          }, 300)
+          }, 100)
         }
       },
       (status) => {
