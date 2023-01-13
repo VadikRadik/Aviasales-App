@@ -10,6 +10,8 @@ export const price = () => ({ type: 'OPTIMAL_PRICE' })
 export const time = () => ({ type: 'OPTIMAL_TIME' })
 export const optimal = () => ({ type: 'OPTIMAL' })
 
+export const optimalFilter = (switchedFilter) => ({ type: 'OPTIMAL_FILTER', switchedFilter })
+
 export const ALL_TICKETS_COUNT = 10000
 
 export const toggleTransfer = (event, index) => ({
@@ -60,24 +62,5 @@ export const getTicketsBatch = () => {
         dispatch(getTicketsFailed(new Error(`Unable to fetch tickets, error: ${error}`)))
       }
     )
-  }
-}
-
-export const getTicketsOld = () => {
-  return (dispatch) => {
-    fetch('https://aviasales-test-api.kata.academy/tickets?searchId=d5c491070ed9410465f2c2c637a03b53')
-      .then((response) => {
-        if (response.ok) {
-          return response.json()
-        } else {
-          dispatch(getTicketsFailed(new Error(`Unable to fetch tickets, responce status: ${response.status}`)))
-        }
-      })
-      .then((result) => {
-        dispatch(getTicketsFinished(result.tickets))
-      })
-      .catch((error) => {
-        dispatch(getTicketsFailed(new Error(`Unable to fetch tickets, error: ${error}`)))
-      })
   }
 }

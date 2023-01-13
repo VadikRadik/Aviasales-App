@@ -1,15 +1,57 @@
 import { OPTIMAL_PRICE, OPTIMAL_TIME, OPTIMAL, ALL_TICKETS_COUNT } from './actions'
 
+const INITIAL_SHOW_TICKETS_COUNT = 5
+//const SHOW_TICKETS_INCREMENET = 5
+
 const initialState = {
   transfersFilter: {
     checks: [false, false, false, false, false],
   },
   optimalFilterValue: OPTIMAL_PRICE,
   tickets: [],
+  filteredTickets: [],
   isNothingToShow: true,
   error: null,
   ticketsLoadingProgress: 0,
-  showTickets: 5,
+  showTickets: INITIAL_SHOW_TICKETS_COUNT,
+}
+
+const filterTicketsByTransfers = (tickets, transfers) => {
+  return tickets.filter((ticket) => {
+    const noTransfersCondition = ticket.segments[0].stops.length === 0 || ticket.segments[1].stops.length === 0
+    const oneTransfersCondition = ticket.segments[0].stops.length === 1 || ticket.segments[1].stops.length === 1
+    const twoTransfersCondition = ticket.segments[0].stops.length === 2 || ticket.segments[1].stops.length === 2
+    const threeTransfersCondition = ticket.segments[0].stops.length === 3 || ticket.segments[1].stops.length === 3
+    return (
+      (transfers[1] && noTransfersCondition) ||
+      (transfers[2] && oneTransfersCondition) ||
+      (transfers[3] && twoTransfersCondition) ||
+      (transfers[4] && threeTransfersCondition)
+    )
+  })
+}
+
+const filter = (allTickets, optimal, transfers) => {
+  const isAllTransfers = transfers.every((check) => check === false)
+  const transfersFiltered = isAllTransfers ? [...allTickets] : filterTicketsByTransfers(allTickets, transfers)
+  switch (optimal) {
+    case OPTIMAL_PRICE:
+      return transfersFiltered.sort((a, b) => a.price - b.price)
+    case OPTIMAL_TIME:
+      return transfersFiltered.sort((a, b) => {
+        return a.segments[0].duration + a.segments[1].duration - (b.segments[0].duration + b.segments[1].duration)
+      })
+    case OPTIMAL:
+      return transfersFiltered.sort((a, b) => {
+        return (
+          a.price / 100000 +
+          (a.segments[0].duration + a.segments[1].duration) / 3000 -
+          (b.price / 100000 + (b.segments[0].duration + b.segments[1].duration) / 3000)
+        )
+      })
+    default:
+      break
+  }
 }
 
 const reducer = (state, action) => {
@@ -19,21 +61,15 @@ const reducer = (state, action) => {
 
   // todo named constant to actions
   switch (action.type) {
-    case 'OPTIMAL_PRICE':
+    case 'OPTIMAL_FILTER': {
+      const newFilteredTickets = filter(state.tickets, action.switchedFilter, state.transfersFilter.checks)
       return {
         ...state,
-        optimalFilterValue: OPTIMAL_PRICE,
+        optimalFilterValue: action.switchedFilter,
+        showTickets: INITIAL_SHOW_TICKETS_COUNT,
+        filteredTickets: newFilteredTickets,
       }
-    case 'OPTIMAL_TIME':
-      return {
-        ...state,
-        optimalFilterValue: OPTIMAL_TIME,
-      }
-    case 'OPTIMAL':
-      return {
-        ...state,
-        optimalFilterValue: OPTIMAL,
-      }
+    }
     case 'TOGGLE_TRANSFER': {
       let newChecks = [...state.transfersFilter.checks]
 
@@ -50,9 +86,13 @@ const reducer = (state, action) => {
         newChecks[0] = otherChecks.every((check) => check === true)
       }
 
+      const newFilteredTickets = filter(state.tickets, state.optimalFilterValue, newChecks)
+
       return {
         ...state,
         transfersFilter: { checks: newChecks },
+        showTickets: INITIAL_SHOW_TICKETS_COUNT,
+        filteredTickets: newFilteredTickets,
       }
     }
     case 'GET_TICKETS_PROCESS_STARTED':
@@ -61,6 +101,8 @@ const reducer = (state, action) => {
         isNothingToShow: true,
         error: null,
         ticketsLoadingProgress: 0,
+        tickets: [],
+        filteredTickets: [],
       }
     case 'GET_TICKETS_FAILED':
       console.log(action.error.message)
@@ -70,17 +112,20 @@ const reducer = (state, action) => {
       }
     case 'GET_TICKETS_FINISHED': {
       const newTickets = [...state.tickets, ...action.tickets]
+      const newFilteredTickets = filter(newTickets, state.optimalFilterValue, state.transfersFilter.checks)
       console.log(100)
       return {
         ...state,
         tickets: newTickets,
         error: null,
         ticketsLoadingProgress: 100,
+        filteredTickets: newFilteredTickets,
       }
     }
     case 'GET_TICKETS_BATCH_GOT': {
       const newTickets = [...state.tickets, ...action.tickets]
       const newProgress = state.ticketsLoadingProgress + (100 * action.tickets.length) / ALL_TICKETS_COUNT
+      const newFilteredTickets = filter(newTickets, state.optimalFilterValue, state.transfersFilter.checks)
       console.log(newProgress)
       return {
         ...state,
@@ -88,6 +133,7 @@ const reducer = (state, action) => {
         tickets: newTickets,
         error: null,
         ticketsLoadingProgress: newProgress,
+        filteredTickets: newFilteredTickets,
       }
     }
 

@@ -2,20 +2,19 @@ import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import { price, time, optimal } from '../../services/redux/actions'
+import { optimalFilter } from '../../services/redux/actions'
 
 import classes from './optimal-filter.module.scss'
 
 const filterItemsLabels = ['Самый дешевый', 'Самый быстрый', 'Оптимальный']
 
-const OptimalFilter = ({ value, price, time, optimal }) => {
-  const actions = [price, time, optimal]
+const OptimalFilter = ({ value, filter }) => {
   const filterItems = filterItemsLabels.map((itemLabel, index) => {
     const itemClass = classNames(classes['optimal-filter__item'], {
       [classes['optimal-filter__item--selected']]: index === value,
     })
     return (
-      <div key={index} className={itemClass} onClick={actions[index]}>
+      <div key={index} className={itemClass} onClick={() => filter(index)}>
         {itemLabel}
       </div>
     )
@@ -31,9 +30,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    price: bindActionCreators(price, dispatch),
-    time: bindActionCreators(time, dispatch),
-    optimal: bindActionCreators(optimal, dispatch),
+    filter: bindActionCreators(optimalFilter, dispatch),
   }
 }
 

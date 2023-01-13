@@ -12,13 +12,13 @@ import { getTicketsProcessStart, getTicketsBatch } from '../../services/redux/ac
 
 import classes from './aviasales-app.module.scss'
 
-const AviasalesApp = ({ startLoadingTickets, loadTickets, allTickets, isLoading, showTickets }) => {
+const AviasalesApp = ({ startLoadingTickets, loadTickets, filteredTickets, isLoading, showTickets }) => {
   useEffect(() => {
     startLoadingTickets()
     loadTickets()
   }, [])
 
-  const tickets = allTickets.slice(0, showTickets)
+  const tickets = filteredTickets ? filteredTickets.slice(0, showTickets) : []
   const ticketsListContent = isLoading ? (
     <Spinner className={classes['aviasales-app__tickets-layout-spinner']} />
   ) : (
@@ -36,7 +36,7 @@ const AviasalesApp = ({ startLoadingTickets, loadTickets, allTickets, isLoading,
     })
   )
   const moreButton =
-    showTickets < allTickets.length ? (
+    filteredTickets && showTickets < filteredTickets.length ? (
       <MoreButton className={classes['aviasales-app__more-button']} onClick={() => {}} />
     ) : null
   return (
@@ -59,7 +59,7 @@ const AviasalesApp = ({ startLoadingTickets, loadTickets, allTickets, isLoading,
 
 const mapStateToProps = (state) => {
   return {
-    allTickets: state.tickets,
+    filteredTickets: state.filteredTickets,
     isLoading: state.isNothingToShow,
     //error: state.error,
     showTickets: state.showTickets,
