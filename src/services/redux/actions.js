@@ -64,3 +64,5 @@ export const getTicketsBatch = () => {
     )
   }
 }
+
+export const showMoreTickets = () => ({ type: 'SHOW_MORE_TICKETS' })

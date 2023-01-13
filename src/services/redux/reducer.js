@@ -1,7 +1,7 @@
 import { OPTIMAL_PRICE, OPTIMAL_TIME, OPTIMAL, ALL_TICKETS_COUNT } from './actions'
 
 const INITIAL_SHOW_TICKETS_COUNT = 5
-//const SHOW_TICKETS_INCREMENET = 5
+const SHOW_TICKETS_INCREMENET = 5
 
 const initialState = {
   transfersFilter: {
@@ -133,6 +133,12 @@ const reducer = (state, action) => {
         error: null,
         ticketsLoadingProgress: newProgress > 100 ? 100 : newProgress,
         filteredTickets: newFilteredTickets,
+      }
+    }
+    case 'SHOW_MORE_TICKETS': {
+      return {
+        ...state,
+        showTickets: state.showTickets + SHOW_TICKETS_INCREMENET,
       }
     }
 

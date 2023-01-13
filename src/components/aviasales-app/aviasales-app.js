@@ -9,11 +9,19 @@ import OptimalFilter from '../optimal-filter'
 import MoreButton from '../more-button'
 import TicketCard from '../ticket-card'
 import Spinner from '../spinner/spinner'
-import { getTicketsProcessStart, getTicketsBatch } from '../../services/redux/actions'
+import { getTicketsProcessStart, getTicketsBatch, showMoreTickets } from '../../services/redux/actions'
 
 import classes from './aviasales-app.module.scss'
 
-const AviasalesApp = ({ startLoadingTickets, loadTickets, filteredTickets, isLoading, showTickets, progress }) => {
+const AviasalesApp = ({
+  startLoadingTickets,
+  loadTickets,
+  filteredTickets,
+  isLoading,
+  showTickets,
+  progress,
+  showMore,
+}) => {
   useEffect(() => {
     startLoadingTickets()
     loadTickets()
@@ -38,7 +46,7 @@ const AviasalesApp = ({ startLoadingTickets, loadTickets, filteredTickets, isLoa
   )
   const moreButton =
     filteredTickets && showTickets < filteredTickets.length ? (
-      <MoreButton className={classes['aviasales-app__more-button']} onClick={() => {}} />
+      <MoreButton className={classes['aviasales-app__more-button']} onClick={showMore} />
     ) : null
   return (
     <div>
@@ -75,6 +83,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     startLoadingTickets: bindActionCreators(getTicketsProcessStart, dispatch),
     loadTickets: bindActionCreators(getTicketsBatch, dispatch),
+    showMore: bindActionCreators(showMoreTickets, dispatch),
   }
 }
 
